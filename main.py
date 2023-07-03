@@ -9,6 +9,8 @@ pygame.init()
 white = (255, 255, 255)
 green = (0, 255, 0)
 blue = (0, 0, 128)
+
+best = 0
 while True:
 
     vec = pygame.math.Vector2
@@ -18,6 +20,8 @@ while True:
     ACC = 2
     FRIC = -1
     FPS = 60
+    bestscore = best
+    besti = font.render("BEST SCORE: " + str(bestscore), True, white)
     Score = 0
     Scre = Score
     text = font.render("SCORE: " + str(Scre), True, white)
@@ -124,6 +128,10 @@ while True:
                     Score = int(Score) + 1
                     Scre = Score
                     text = font.render("SCORE: " + str(Scre), True, white)
+                    if Score > bestscore:
+                        bestscore = Score
+                        best = bestscore
+                        besti = font.render("BEST SCORE: " + str(bestscore), True, white)
                     plat.kill()
         
         if P1.rect.top > HEIGHT:
@@ -142,7 +150,8 @@ while True:
         for entity in all_sprites:
             displaysurface.blit(entity.surf, entity.rect)
 
-        displaysurface.blit(text, (200,50)) 
+        displaysurface.blit(text, (200,50))
+        displaysurface.blit(besti, (200,100))
         P1.move()
         P1.update()
         pygame.display.update()
