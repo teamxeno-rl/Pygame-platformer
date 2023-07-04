@@ -9,9 +9,10 @@ pygame.init()
 white = (255, 255, 255)
 green = (0, 255, 0)
 blue = (0, 0, 128)
-
+hisc = open("HS.txt","r+")
 best = 0
-bestscore = 0
+bestscore = int(hisc.read())
+hisc.close()
 while True:
     best = bestscore
     vec = pygame.math.Vector2
@@ -114,8 +115,8 @@ while True:
         platforms.add(pl)
         all_sprites.add(pl)
 
-    run1 = bool(True)
-    while run1:
+    gameover = False
+    while not gameover:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_q:
@@ -133,30 +134,38 @@ while True:
                     Score = int(Score) + 1
                     Scre = Score
                     text = font.render("SCORE: " + str(Scre), True, white)
-                    if Score > bestscore:
+                    if Score > bestscore and int(Score) > 0:
                         bestscore = Score
                         besti = font.render("BEST SCORE: " + str(bestscore), True, white)
+
+                        hisc = open("HS.txt","w+")
+                        hisc.truncate()
+                        hisc.close()
+
+                        hisc = open("HS.txt","w+")
+                        hisc.write(str(bestscore))
+                        hisc.close()
                     plat.kill()
         
         if PL1.rect.top > HEIGHT:
             for entity in all_sprites:
                 entity.kill()
-                time.sleep(1)
-                displaysurface.fill((255,0,0))
-                if Score < best:
-                    text = font.render("FINAL SCORE: " + str(Scre), True, white)
-                    text2 = font.render("BEST SCORE: " + str(bestscore), True, green)
-                    displaysurface.blit(text, (120,300))
-                    displaysurface.blit(text2, (120,350))
-                elif Score == best:
-                    text = font.render("FINAL SCORE: " + str(Scre), True, green)
-                    displaysurface.blit(text, (120,300))
-                elif Score > best:
-                    text = font.render("NEW HIGH SCORE: " + str(Scre), True, green)
-                    displaysurface.blit(text, (120,300))
-                pygame.display.update()
-                time.sleep(5)
-                run1 = bool(0)
+            time.sleep(1)
+            displaysurface.fill((255,0,0))
+            if Score < best:
+                text = font.render("FINAL SCORE: " + str(Scre), True, white)
+                text2 = font.render("BEST SCORE: " + str(bestscore), True, green)
+                displaysurface.blit(text, (120,300))
+                displaysurface.blit(text2, (120,350))
+            elif Score == best:
+                text = font.render("FINAL SCORE: " + str(Scre), True, green)
+                displaysurface.blit(text, (120,300))
+            elif Score > best:
+                text = font.render("NEW HIGH SCORE: " + str(Scre), True, green)
+                displaysurface.blit(text, (120,300))
+            pygame.display.update()
+            time.sleep(5)
+            gameover = True
                 
         displaysurface.fill((0,0,0))
 
